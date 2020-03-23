@@ -1,5 +1,6 @@
 """ Full assembly of the parts to form the complete network """
 
+import torch.nn as nn
 from .fragments import DoubleConv, Up, Down, OutConv
 
 
