@@ -5,21 +5,21 @@ from .fragments import DoubleConv, Up, Down, OutConv
 
 
 class UNet(nn.Module):
-    def __init__(self, n_channels, n_classes, is_bilinear=False):
+    def __init__(self, n_channels, n_classes, feature_dim=64, is_bilinear=False):
         super().__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = is_bilinear
 
-        self.inc = DoubleConv(n_channels, 64)
-        self.down1 = Down(64, 128)
-        self.down2 = Down(128, 256)
-        self.down3 = Down(256, 512)
-        self.down4 = Down(512, 512)
-        self.up1 = Up(1024, 256, is_bilinear)
-        self.up2 = Up(512, 128, is_bilinear)
-        self.up3 = Up(256, 64, is_bilinear)
-        self.up4 = Up(128, 64, is_bilinear)
+        self.inc = DoubleConv(n_channels, feature_dim)
+        self.down1 = Down(feature_dim, 2 * feature_dim)
+        self.down2 = Down(2 * feature_dim, 4 * feature_dim)
+        self.down3 = Down(4 * feature_dim, 8 * feature_dim)
+        self.down4 = Down(8 * feature_dim, 8 * feature_dim)
+        self.up1 = Up(16 * feature_dim, 8 * feature_dim, is_bilinear)
+        self.up2 = Up(8 * feature_dim, 4 * feature_dim, is_bilinear)
+        self.up3 = Up(4 * feature_dim, feature_dim, is_bilinear)
+        self.up4 = Up(2 * feature_dim, feature_dim, is_bilinear)
         self.outc = OutConv(64, n_classes)
 
     def forward(self, x):
