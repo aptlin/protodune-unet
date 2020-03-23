@@ -16,11 +16,11 @@ class UNet(nn.Module):
         self.down2 = Down(2 * feature_dim, 4 * feature_dim)
         self.down3 = Down(4 * feature_dim, 8 * feature_dim)
         self.down4 = Down(8 * feature_dim, 8 * feature_dim)
-        self.up1 = Up(16 * feature_dim, 8 * feature_dim, is_bilinear)
-        self.up2 = Up(8 * feature_dim, 4 * feature_dim, is_bilinear)
+        self.up1 = Up(16 * feature_dim, 4 * feature_dim, is_bilinear)
+        self.up2 = Up(8 * feature_dim, 2 * feature_dim, is_bilinear)
         self.up3 = Up(4 * feature_dim, feature_dim, is_bilinear)
         self.up4 = Up(2 * feature_dim, feature_dim, is_bilinear)
-        self.outc = OutConv(64, n_classes)
+        self.outc = OutConv(feature_dim, n_classes)
 
     def forward(self, x):
         x1 = self.inc(x)
